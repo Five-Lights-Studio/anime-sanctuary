@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Transactional // 각 테스트가 독립적으로 실행되도록 트랜잭션을 사용
+@Transactional // Ensure each test runs independently with its own transaction
 public class MemberControllerTest {
 
     @Autowired
@@ -35,18 +35,19 @@ public class MemberControllerTest {
             }
         """;
 
+        // Perform a POST request to register a new member
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(memberJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.username").value("testuser"))
-                .andExpect(jsonPath("$.email").value("johndoe@example.com"));
+                .andExpect(status().isOk()) // Expect a 200 OK status
+                .andExpect(jsonPath("$.id").isNumber()) // Validate that the response contains a numeric ID
+                .andExpect(jsonPath("$.username").value("testuser")) // Validate the username in the response
+                .andExpect(jsonPath("$.email").value("johndoe@example.com")); // Validate the email in the response
     }
 
     @Test
     public void shouldFailRegistrationWhenUsernameExists() throws Exception {
-        // 사전 조건: 이미 존재하는 사용자 등록
+        // Register an existing user
         String existingUserJson = """
             {
                 "username": "existinguser",
@@ -60,9 +61,9 @@ public class MemberControllerTest {
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(existingUserJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()); // Expect a 200 OK status for the first registration
 
-        // 동일한 사용자명을 가진 사용자 등록 시도
+        // Attempt to register a new user with the same username
         String newUserJson = """
             {
                 "username": "existinguser",
@@ -76,12 +77,12 @@ public class MemberControllerTest {
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newUserJson))
-                .andExpect(status().isBadRequest());  // 이미 존재하는 사용자명으로 등록 시 실패해야 함
+                .andExpect(status().isBadRequest());  // Expect a 400 Bad Request status due to duplicate username
     }
 
     @Test
     public void shouldLoginSuccessfully() throws Exception {
-        // 사용자 등록
+        // Register a user for login
         String memberJson = """
             {
                 "username": "loginuser",
@@ -95,9 +96,9 @@ public class MemberControllerTest {
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(memberJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()); // Expect a 200 OK status for registration
 
-        // 로그인 시도
+        // Attempt to log in with the registered user
         String loginJson = """
             {
                 "username": "loginuser",
@@ -107,12 +108,12 @@ public class MemberControllerTest {
         mockMvc.perform(post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loginJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()); // Expect a 200 OK status for successful login
     }
 
     @Test
     public void shouldFailLoginWithWrongPassword() throws Exception {
-        // 사용자 등록
+        // Register a user for login
         String memberJson = """
             {
                 "username": "loginuser",
@@ -126,9 +127,9 @@ public class MemberControllerTest {
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(memberJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()); // Expect a 200 OK status for registration
 
-        // 잘못된 비밀번호로 로그인 시도
+        // Attempt to log in with the wrong password
         String loginJson = """
             {
                 "username": "loginuser",
@@ -138,18 +139,18 @@ public class MemberControllerTest {
         mockMvc.perform(post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loginJson))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized()); // Expect a 401 Unauthorized status for wrong password
     }
 
     @Test
     public void shouldDeleteMemberSuccessfully() throws Exception {
-        // 사용자 등록
+        // Register a user to be deleted
         String memberJson = """
             {
-                "username": "deletetest",
-                "password": "deletepassword",
-                "name": "Delete Test",
-                "email": "deletetest@example.com",
+                "username": "loginuser",
+                "password": "securepassword",
+                "name": "Login User",
+                "email": "loginuser@example.com",
                 "gender": "MALE",
                 "birth": "1990-01-01"
             }
@@ -157,24 +158,24 @@ public class MemberControllerTest {
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(memberJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()); // Expect a 200 OK status for registration
 
-        // 로그인 (세션 설정을 위해)
+        // Log in the user to establish a session
         String loginJson = """
             {
-                "username": "deletetest",
-                "password": "deletepassword"
+                "username": "loginuser",
+                "password": "securepassword"
             }
         """;
         mockMvc.perform(post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loginJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()); // Expect a 200 OK status for successful login
 
-        // 회원 삭제 시도
-        mockMvc.perform(post("/api/members/delete/{id}", 1L)
-                .param("username", "deletetest")
-                .param("password", "deletepassword"))
-                .andExpect(status().isOk());
+        // Attempt to delete the registered user (ID should be fetched dynamically if necessary)
+        mockMvc.perform(post("/api/members/delete/{id}", 1L)  // Use the correct user ID
+                .param("username", "loginuser")
+                .param("password", "securepassword"))
+                .andExpect(status().isOk()); // Expect a 200 OK status for successful deletion
     }
 }
