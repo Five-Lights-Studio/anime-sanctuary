@@ -172,7 +172,7 @@ public class MemberControllerTest {
                 .andExpect(status().isOk());
 
         // 회원 삭제 시도
-        mockMvc.perform(delete("/api/members/delete/{id}", 1L)
+        mockMvc.perform(post("/api/members/delete/{id}", 1L)
                 .param("username", "deletetest")
                 .param("password", "deletepassword"))
                 .andExpect(status().isOk());
