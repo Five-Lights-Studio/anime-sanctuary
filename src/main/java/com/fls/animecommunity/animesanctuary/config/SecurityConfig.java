@@ -19,6 +19,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
                 //apitest를 위해 추가
                 .requestMatchers("/api/**").permitAll()  // /api/notes/** 경로 인증 없이 접근 가능
+                .requestMatchers("/", "/index.html", "/static/**", "/public/**").permitAll()
                 .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
             );
 
