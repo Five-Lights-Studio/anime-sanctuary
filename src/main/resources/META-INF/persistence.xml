@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    <!-- 유닛 구분 이름 -->
+    <persistence-unit name="jpa_mysql">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <!-- MySQL 설치시 설정한 유저네임(최상위 계정) -->
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <!-- MySQL 설치시 설정한 비밀번호 -->
+            <property name="javax.persistence.jdbc.password" value="root"/>
+            <!-- ...3306/스키마명 -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/datasa"/>
+            <!-- 데이터베이스 방언은 MySQL로 -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+
+            <!-- 옵션 -->
+            <!--보내지는 쿼리를 콘솔에 표시 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <!--여러줄 들여쓰기 -->
+            <property name="hibernate.format_sql" value="true"/>
+            <!--주석달아줌 -->
+            <property name="hibernate.use_sql_comments"  value="true"/>
+            <!--바뀐내용이 있으면 만들어버림 -->
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+            <!--create 속성 entity 기준으로 다시 생성-->
+        </properties>
+    </persistence-unit>
+
+</persistence>
