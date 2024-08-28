@@ -151,4 +151,9 @@ public class MemberService {
         }
     }
 
+	public String getAccessToken(String code) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
