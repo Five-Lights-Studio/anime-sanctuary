@@ -21,7 +21,7 @@ import com.fls.animecommunity.animesanctuary.dto.MemberRegisterDto;
 import com.fls.animecommunity.animesanctuary.model.UpdateProfileRequest;
 import com.fls.animecommunity.animesanctuary.model.member.GenderType;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
-import com.fls.animecommunity.animesanctuary.service.impl.MemberService;
+import com.fls.animecommunity.animesanctuary.service.impl.MemberServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class MemberController {
 
     @Autowired
-    private MemberService memberService;
+    private MemberServiceImpl memberService;
 
     @PostMapping("/register")
     public ResponseEntity<Member> register(@RequestBody MemberRegisterDto memberDto) {
