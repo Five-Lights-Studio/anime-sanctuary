@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+    .login-container h2 {
+      margin-bottom: 20px;
+    }
+    .login-container input[type="text"], 
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .login-container button:hover {
+      background-color: #45a049;
+    }
+    .line-login-btn img {
+      width: 100%;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form action="/login" method="POST">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div class="line-login-btn">
+      <a href=url>
+        <img src="https://d.line-scdn.net/r/LIWebLogin/button_login_base.png" alt="LINE Login">
+      </a>
+      
+    </div>
+  </div>
+  <script>
+    router.get("/line", (request, response) => {
+    let url =
+        "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=2006160018&redirect_uri=http://localhost:9000/auth/callback&state=xyzABC123&scope=profile%20openid%20email&nonce=abc123xyz";
+    response.redirect(url);
+});
+router.get("/line/callback", async (request, response) => {
+    const state = request.query.state;
+    const code = request.query.code;
+    console.log(code);
+    
+    var headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    const dataTosend = {
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: "http://localhost:9000/auth/callback",
+        client_id: "2000361421",
+        client_secret: process.env.LINE_SECRET,
+    };
+    const url = "https://api.line.me/oauth2/v2.1/token";
+    const apiresponse = await axios.post(url, dataTosend, { headers });
+    console.log(apiresponse.data.access_token);
+    
+    var headers = {
+        authorization: `Bearer ${apiresponse.data.access_token}`,
+    };
+    const userdata = await axios.get("https://api.line.me/v2/profile", {
+        headers,
+    });
+    console.log(userdata.data);
+
+    response.send("Ss");
+});
+
+
+
+    // URL에서 code 파라미터 추출하기
+    function getQueryParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const code = getQueryParameter('code');
+
+    if (code) {
+      console.log('Authorization Code:', code);
+    } else {
+      console.log('No authorization code found.');
+    }
+  </script>
+</body>
+</html>
