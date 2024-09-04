@@ -116,7 +116,7 @@ public class LineLoginController {
 	    
 	    
 //	    member.setUsername(userId);
-	    member.setUsername(displayName);
+	    member.setUsername(userId);
 	    member.setPassword("aaaa");
 	    member.setName(displayName);
 	    member.setBirth(LocalDate.of(1970, 1, 1));
@@ -124,8 +124,16 @@ public class LineLoginController {
 	    memberRepository.save(member);
 	    log.info("sucess: Create new user");
 	    log.info("member: {}",member);
+//	    Member member = memberRepository.findByLineUserId(lineUserId);
+//        if (member == null) {
+//            member = new Member();
+//            member.setLineUserId(lineUserId);
+//            member.setUsername((String) userProfile.get("displayName"));
+//            member.setProfileImage((String) userProfile.get("pictureUrl"));
+//            memberRepository.save(member);
+//        }
 
-	    return "index"; 
+	    return "login"; 
 	}
 
 
