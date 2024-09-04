@@ -19,7 +19,7 @@ public class HomeController {
 	//Home ,main , index page
 	@GetMapping("/")
 	public String home() {
-//		log.info("home() 실행");
+		log.info("home() 실행");
 		return "index";
 	}	
 }

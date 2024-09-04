@@ -29,7 +29,7 @@ public class Member {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(length = 20, nullable = false, unique = true)
+	@Column(length = 255, nullable = false, unique = true)
 	private String username;
 
 	@Column(length = 100, nullable = false)
@@ -38,14 +38,14 @@ public class Member {
 	@Column(length = 50, nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private LocalDate birth;
 
 	@Column(length = 100)
 	private String email;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private GenderType gender;
 
 	@Column(length = 255)
