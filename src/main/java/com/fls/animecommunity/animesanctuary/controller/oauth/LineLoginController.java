@@ -35,7 +35,8 @@ public class LineLoginController {
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
 	private String channelID = "2006160018";
-
+	private int i = 789;
+	
 	// 로그인 후 code와 state 값을 받아옴 , Callback URL
 	@GetMapping
 	public String handleCallback(@RequestParam("code") String code, @RequestParam("state") String state,
@@ -107,16 +108,11 @@ public class LineLoginController {
 	    
 	    // Create new user (User profile)
 	    Member member = new Member();
+	     
 	    
-	    String username = userId;
-
-	    if (username.length() > 50) {  // 데이터베이스 제한에 맞춰 50자로 제한
-	        username = username.substring(0, 50);  // 50자까지만 잘라서 저장
-	    }
+	    member.setUsername("testUser"+i);
+	    i++;
 	    
-	    
-//	    member.setUsername(userId);
-	    member.setUsername(userId);
 	    member.setPassword("aaaa");
 	    member.setName(displayName);
 	    member.setBirth(LocalDate.of(1970, 1, 1));
@@ -124,16 +120,12 @@ public class LineLoginController {
 	    memberRepository.save(member);
 	    log.info("sucess: Create new user");
 	    log.info("member: {}",member);
-//	    Member member = memberRepository.findByLineUserId(lineUserId);
-//        if (member == null) {
-//            member = new Member();
-//            member.setLineUserId(lineUserId);
-//            member.setUsername((String) userProfile.get("displayName"));
-//            member.setProfileImage((String) userProfile.get("pictureUrl"));
-//            memberRepository.save(member);
-//        }
-
-	    return "login"; 
+	    
+	    //login하기 post요청을 보내서 세션생성
+//	    WebClient webClient = WebClient.create("https://");
+	    
+	    
+	    return "redirect:/"; 
 	}
 
 
@@ -142,7 +134,7 @@ public class LineLoginController {
 	public String ACCESS_DENIED(@RequestParam String error, @RequestParam String error_description) {
 		log.info("error : {}", error);
 		log.info("error_description : {}", error_description);
-		return "redirect://";
+		return "redirect:/";
 	}
 
 	// error INVALID_REQUEST
@@ -150,7 +142,7 @@ public class LineLoginController {
 	public String INVALID_REQUEST(@RequestParam String error, @RequestParam String error_description) {
 		log.info("error : {}", error);
 		log.info("error_description : {}", error_description);
-		return "redirect://";
+		return "redirect:/";
 	}
 
 	// error INVALID_SCOPE
@@ -158,7 +150,7 @@ public class LineLoginController {
 	public String INVALID_SCOPE(@RequestParam String error, @RequestParam String error_description) {
 		log.info("error : {}", error);
 		log.info("error_description : {}", error_description);
-		return "redirect://";
+		return "redirect:/";
 	}
 
 	// error SERVER_ERROR
@@ -166,7 +158,7 @@ public class LineLoginController {
 	public String SERVER_ERROR(@RequestParam String error, @RequestParam String error_description) {
 		log.info("error : {}", error);
 		log.info("error_description : {}", error_description);
-		return "redirect://";
+		return "redirect:/";
 	}
 
 	// error UNSUPPORTED_RESPONSE_TYPE
@@ -174,7 +166,7 @@ public class LineLoginController {
 	public String UNSUPPORTED_RESPONSE_TYPE(@RequestParam String error, @RequestParam String error_description) {
 		log.info("error : {}", error);
 		log.info("error_description : {}", error_description);
-		return "redirect://";
+		return "redirect:/";
 	}
 
 }
