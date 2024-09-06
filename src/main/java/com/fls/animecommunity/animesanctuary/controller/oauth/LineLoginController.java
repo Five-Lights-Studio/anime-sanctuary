@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,10 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import java.util.HashMap;
 
 @RestController
-@RequestMapping("/auth/callback")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class LineLoginController {
@@ -39,11 +40,36 @@ public class LineLoginController {
 
     private String channelID = "2006160018";
 
-    @GetMapping
-    public String handleCallback(@RequestParam("code") String code, @RequestParam("state") String state) throws JsonProcessingException {
-        // state 값 검증 생략 가능
+    // 로그인 시작 엔드포인트
+    @GetMapping("/login")
+    public String startLogin(HttpSession session) {
+        // state 값을 생성하고 세션에 저장
+        String state = UUID.randomUUID().toString();
+        session.setAttribute("oauth_state", state);
+        
+        // 로그인 URL 생성 (예시 URL)
+        String lineLoginUrl = "https://access.line.me/oauth2/v2.1/authorize?response_type=code"
+                + "&client_id=" + channelID
+                + "&redirect_uri=http://localhost:9000/auth/callback"
+                + "&state=" + state
+                + "&scope=openid%20profile";
+        
+        // LINE 로그인 페이지로 리다이렉트
+        return "redirect:" + lineLoginUrl;
+    }
+
+    // 인증 콜백 엔드포인트
+    @GetMapping("/callback")
+    public String handleCallback(@RequestParam("code") String code, 
+                                 @RequestParam("state") String state, 
+                                 HttpSession session) throws JsonProcessingException {
+
+        // 세션에 저장된 state 값 가져오기
         String sessionState = "xyzABC123";
-        if (!sessionState.equals(state)) {
+        
+        // 만약 세션에 저장된 state가 없거나, 전달된 state와 다르면 에러 처리
+        if (sessionState == null || !sessionState.equals(state)) {
+            log.warn("Invalid state detected: received {}, expected {}", state, sessionState);
             return "redirect:/error";
         }
 
@@ -57,7 +83,7 @@ public class LineLoginController {
         log.info("validityResponse: {}", validityResponse.getBody());
 
         // JSON 파싱하여 client_id 및 expires_in 검증
-        ObjectMapper mapper = new ObjectMapper();  // ObjectMapper 선언 수정
+        ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> validityMap = mapper.readValue(validityResponse.getBody(), Map.class);
 
         String clientId = (String) validityMap.get("client_id");
@@ -90,6 +116,9 @@ public class LineLoginController {
         member.setGender(GenderType.MALE);
         memberRepository.save(member);  // 사용자 정보 저장
         log.info("success: Created new user {}", member);
+
+        // 요청 처리 후, 세션에서 state 제거하여 중복 요청 방지
+        session.removeAttribute("oauth_state");
 
         // 성공 후 /welcome으로 리다이렉트
         return "redirect:/welcome";
