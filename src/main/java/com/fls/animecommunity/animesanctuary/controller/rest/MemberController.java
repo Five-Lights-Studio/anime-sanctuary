@@ -2,10 +2,13 @@ package com.fls.animecommunity.animesanctuary.controller.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,45 +25,61 @@ import com.fls.animecommunity.animesanctuary.dto.MemberRegisterDto;
 import com.fls.animecommunity.animesanctuary.model.UpdateProfileRequest;
 import com.fls.animecommunity.animesanctuary.model.member.GenderType;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
+import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.service.impl.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/members")
 @CrossOrigin(origins = {"http://localhost:9000", "http://localhost:5501"})
 public class MemberController {
 
-    @Autowired
+	@Autowired
     private MemberService memberService;
+
+    @Autowired
+    private MemberRepository memberRepository; // memberRepository 추가
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; // passwordEncoder 추가
 
     @PostMapping("/register")
     public ResponseEntity<Member> register(@RequestBody MemberRegisterDto memberDto) {
         Member member = new Member();
         member.setUsername(memberDto.getUsername());
-        member.setPassword(memberDto.getPassword());
+        member.setPassword(passwordEncoder.encode(memberDto.getPassword())); // 패스워드 암호화
         member.setName(memberDto.getName());
         member.setEmail(memberDto.getEmail());
         member.setGender(GenderType.valueOf(memberDto.getGender().toUpperCase()));
         member.setBirth(memberDto.getBirth());
-        
+
         Member registeredMember = memberService.register(member);
         return ResponseEntity.ok(registeredMember);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
-        Member member = memberService.login(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
-        if (member != null) {
-            // 세션 생성
-            request.getSession().setAttribute("user", member);
-            return ResponseEntity.ok("Login successful");
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        String usernameOrEmail = loginRequest.getUsernameOrEmail();
+        String password = loginRequest.getPassword();
+
+        Optional<Member> memberOptional = memberRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+
+            // 비밀번호가 일치하는지 확인
+            if (passwordEncoder.matches(password, member.getPassword())) {
+                request.getSession().setAttribute("user", member);
+                return ResponseEntity.ok("Login successful");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            }
         } else {
-            return ResponseEntity.status(401).body("Invalid username/email or password");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
     }
-
+    
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         // 세션 무효화

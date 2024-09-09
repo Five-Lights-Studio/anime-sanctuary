@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,11 +45,14 @@ public class MemberService {
     }
 
     public Member login(String usernameOrEmail, String password) {
-        Member member = memberRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
-        if (member != null && passwordEncoder.matches(password, member.getPassword())) {
-            return member;
+        Optional<Member> memberOptional = memberRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            if (passwordEncoder.matches(password, member.getPassword())) {
+                return member;
+            }
         }
-        return null;
+        return null; // 또는 적절한 예외 처리
     }
 
     @Transactional
