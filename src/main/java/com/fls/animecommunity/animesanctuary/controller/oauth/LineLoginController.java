@@ -121,6 +121,6 @@ public class LineLoginController {
         session.removeAttribute("oauth_state");
 
         // 성공 후 /welcome으로 리다이렉트
-        return "redirect:/welcome";
+        return "redirect:/index";
     }
 }
