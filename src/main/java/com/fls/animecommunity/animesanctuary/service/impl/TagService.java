@@ -1,7 +1,7 @@
 package com.fls.animecommunity.animesanctuary.service.impl;
 
-import com.fls.animecommunity.animesanctuary.model.tag.Tag;
 import com.fls.animecommunity.animesanctuary.model.note.Note;
+import com.fls.animecommunity.animesanctuary.model.tag.Tag;
 import com.fls.animecommunity.animesanctuary.repository.TagRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +25,11 @@ public class TagService {
         Tag tag = tagRepository.findByName(tagName)
                 .orElse(new Tag(tagName));
 
-        if (note.getTags().contains(tag)) {
+        if (note.getTagEntities().contains(tag)) {
             throw new IllegalArgumentException("이미 존재하는 태그입니다.");
         }
 
-        note.getTags().add(tag);
+        note.getTagEntities().add(tag);  // 새로운 태그 엔티티 리스트에 추가
         tag.getNotes().add(note);
 
         return tagRepository.save(tag);
@@ -38,7 +38,7 @@ public class TagService {
     public List<Tag> getTagsByNoteId(Long noteId) {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 노트를 찾을 수 없습니다."));
-        return note.getTags();
+        return note.getTagEntities();  // 새로운 태그 엔티티 리스트 반환
     }
 
     public List<Note> getNotesByTag(String tagName) {
