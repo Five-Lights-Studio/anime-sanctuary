@@ -1,18 +1,18 @@
-package com.fls.animecommunity.animesanctuary.controller.html;
+package com.fls.animecommunity.animesanctuary.controller.rest;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "Login page";
     }
 
     @GetMapping("/home")
     public String home() {
-        return "home";
+        return "Home page";
     }
 }

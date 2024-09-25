@@ -25,14 +25,14 @@ public class NotificationService {
     }
 
     public List<Notification> getUnreadNotifications(Long memberId) {
-        return notificationRepository.findByRecipientIdAndReadFalse(memberId);
-    }
+        return notificationRepository.findByRecipientIdAndReadStatusFalse(memberId);
+    }    
 
     @Transactional
     public void markAsRead(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
-        notification.setRead(true);
+        notification.setReadStatus(true);  // 수정된 부분
         notificationRepository.save(notification);
     }
 }

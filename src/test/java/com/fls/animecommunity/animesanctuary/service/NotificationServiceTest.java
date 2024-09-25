@@ -60,7 +60,7 @@ class NotificationServiceTest {
 
         Notification notification = new Notification(member, comment, "Test message");
 
-        when(notificationRepository.findByRecipientIdAndReadFalse(anyLong())).thenReturn(List.of(notification));
+        when(notificationRepository.findByRecipientIdAndReadStatusFalse(anyLong())).thenReturn(List.of(notification));
 
         List<Notification> unreadNotifications = notificationService.getUnreadNotifications(1L);
 
@@ -73,13 +73,13 @@ class NotificationServiceTest {
     void markAsRead_shouldUpdateNotification_whenValidNotificationIdIsGiven() {
         Notification notification = new Notification();
         notification.setId(1L);
-        notification.setRead(false);
+        notification.setReadStatus(false);
 
         when(notificationRepository.findById(anyLong())).thenReturn(Optional.of(notification));
 
         notificationService.markAsRead(1L);
 
-        assertEquals(true, notification.isRead());
+        assertEquals(true, notification.isReadStatus());
         verify(notificationRepository, times(1)).save(notification);
     }
 }

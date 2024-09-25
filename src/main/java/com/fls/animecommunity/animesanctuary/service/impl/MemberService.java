@@ -20,7 +20,10 @@ import com.fls.animecommunity.animesanctuary.model.note.Note;
 import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -46,7 +49,8 @@ public class MemberService {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         return memberRepository.save(member);
     }
-
+    
+    //login
     public Member login(String usernameOrEmail, String password) {
         Optional<Member> member = memberRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
         return member.filter(m -> passwordEncoder.matches(password, m.getPassword()))

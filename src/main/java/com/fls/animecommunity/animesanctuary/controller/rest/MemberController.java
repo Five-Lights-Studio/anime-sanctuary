@@ -28,11 +28,13 @@ import com.fls.animecommunity.animesanctuary.service.impl.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
-@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin(origins = {"http://localhost:9000/", "http://localhost:5501"})
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -59,11 +61,14 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         Member member = memberService.login(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
+        log.info("member : {} ", member);
         if (member != null) {
             // 세션 생성
+        	log.info("in if member : {} ", member);
             request.getSession().setAttribute("user", member);
-            return ResponseEntity.ok("Login successful");
+            return ResponseEntity.ok(member);
         } else {
+        	log.info("in else member : {} ", member);
             return ResponseEntity.status(401).body("Invalid username/email or password");
         }
     }

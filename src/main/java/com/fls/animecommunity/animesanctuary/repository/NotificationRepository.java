@@ -9,5 +9,5 @@ import com.fls.animecommunity.animesanctuary.model.notification.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-    List<Notification> findByRecipientIdAndReadFalse(Long recipientId);
+    List<Notification> findByRecipientIdAndReadStatusFalse(Long recipientId);
 }

@@ -40,9 +40,9 @@ public class Notification {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false)
-    private boolean read = false;
-
+    @Column(name = "read_status", nullable = false)
+    private boolean readStatus = false;
+    
     // 알림 생성자
     public Notification(Member recipient, Comment comment, String message) {
         this.recipient = recipient;
