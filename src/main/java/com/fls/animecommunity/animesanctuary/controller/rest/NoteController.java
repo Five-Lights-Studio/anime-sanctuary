@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
@@ -45,6 +44,7 @@ public class NoteController {
 
     // 의존성 주입
     private final NoteService noteService;
+    private final MemberService memberService;
     
     //create Note
     @PostMapping(consumes = { "multipart/form-data" })

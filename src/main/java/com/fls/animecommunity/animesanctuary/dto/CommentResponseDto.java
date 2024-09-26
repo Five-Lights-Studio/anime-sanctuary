@@ -1,9 +1,9 @@
 package com.fls.animecommunity.animesanctuary.dto;
 
-import com.fls.animecommunity.animesanctuary.model.comment.Comment;
-import lombok.Data;
-
 import java.time.LocalDateTime;
+import com.fls.animecommunity.animesanctuary.model.comment.Comment;
+
+import lombok.Data;
 
 @Data
 public class CommentResponseDto {

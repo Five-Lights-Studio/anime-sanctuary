@@ -2,9 +2,7 @@ package com.fls.animecommunity.animesanctuary.service.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,7 +33,6 @@ public class NoteServiceImpl implements NoteService {
     private final NoteRepository noteRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
-    private final MemberRepository memberRepository;
 
     // 개별 노트 조회
     // 상수로 중복된 메시지 정의
@@ -96,16 +93,14 @@ public class NoteServiceImpl implements NoteService {
         log.info("ID로 노트를 수정합니다. ID: {}", id);
 
         Note note = noteRepository.findById(id)
-                                .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND_MESSAGE + id));
+                .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND_MESSAGE + id));
 
         // 작성자가 일치하는지 확인
         if (!note.getMember().getId().equals(requestsDto.getMemberId())) {
             throw new IllegalStateException("이 노트를 수정할 권한이 없습니다.");
         }
 
-        Note note = optionalNote.get();
         note.update(requestsDto);
-        
         return new NoteResponseDto(note);
     }
 

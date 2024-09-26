@@ -14,7 +14,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import lombok.Data;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -23,7 +22,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 public class Note extends Timestamped {
 
@@ -46,8 +47,14 @@ public class Note extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
-    
+
     private String imagePath;  // 이미지 경로 추가
+
+    @ElementCollection
+    private List<String> tags;
+
+    @ManyToMany(mappedBy = "savedNotes")
+    private Set<Member> savedByMembers;
 
     public Note(String title, String contents, Member member) {
         this.title = title;
@@ -56,36 +63,8 @@ public class Note extends Timestamped {
     }
 
     public void update(NoteRequestsDto requestsDto) {
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    // Getter and Setter - member
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    // 노트와 연관된 태그들
-    @ElementCollection
-    private List<String> tags;
-
-    // 이 노트를 저장한 사용자들 (ManyToMany 관계)
-    @ManyToMany(mappedBy = "savedNotes")
-    private Set<Member> savedByMembers;
-
-    public Note(NoteRequestsDto requestsDto) {
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
-        if (requestsDto.getCategoryId() != null) {
-            // 필요 시 카테고리 업데이트 로직 추가
-        }
-    }
-    
-    public void setCategory(Category category) {
-        this.category = category;
+        // 필요 시 카테고리나 다른 필드 업데이트
     }
 }
