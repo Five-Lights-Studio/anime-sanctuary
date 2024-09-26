@@ -1,10 +1,16 @@
 package com.fls.animecommunity.animesanctuary.service.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fls.animecommunity.animesanctuary.exception.ResourceNotFoundException;
 import com.fls.animecommunity.animesanctuary.model.category.Category;
@@ -30,6 +36,7 @@ public class NoteServiceImpl implements NoteService {
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
 
+    // 개별 노트 조회
     // 상수로 중복된 메시지 정의
     private static final String ID_NOT_FOUND_MESSAGE = "아이디가 존재하지 않습니다.: ";
 
@@ -94,12 +101,10 @@ public class NoteServiceImpl implements NoteService {
         if (!note.getMember().getId().equals(requestsDto.getMemberId())) {
             throw new IllegalStateException("이 노트를 수정할 권한이 없습니다.");
         }
-
         note.update(requestsDto);
-        log.info("노트가 성공적으로 수정되었습니다. ID: {}", id);
-
         return new NoteResponseDto(note);
     }
+
 
     // 노트 삭제 (인증된 사용자 필요)
     @Override
@@ -132,4 +137,44 @@ public class NoteServiceImpl implements NoteService {
                     .map(NoteResponseDto::new)
                     .collect(Collectors.toList());
     }
+    
+    @Override
+    @Transactional
+    public NoteResponseDto createNoteWithImage(NoteRequestsDto requestsDto, MultipartFile image) throws IOException {
+        Member member = memberRepository.findById(requestsDto.getMemberId())
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
+
+        Note note = new Note(requestsDto.getTitle(), requestsDto.getContents(), member);
+
+        // 카테고리 설정 (필요 시)
+        if (requestsDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(requestsDto.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            note.setCategory(category);
+        }
+
+        // 이미지 업로드 처리
+        if (image != null && !image.isEmpty()) {
+            String uploadDir = System.getProperty("user.dir") + "/uploads/note-images/" + member.getId();
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                boolean created = directory.mkdirs();
+                if (!created) {
+                    throw new IOException("Failed to create directory: " + uploadDir);
+                }
+            }
+
+            String originalFilename = image.getOriginalFilename();
+            String filePath = uploadDir + "/" + UUID.randomUUID().toString() + "_" + originalFilename;
+            File destinationFile = new File(filePath);
+            image.transferTo(destinationFile);
+
+            // 노트에 이미지 경로 저장
+            note.setImagePath(filePath);
+        }
+
+        noteRepository.save(note);
+        return new NoteResponseDto(note);
+    }
+
 }

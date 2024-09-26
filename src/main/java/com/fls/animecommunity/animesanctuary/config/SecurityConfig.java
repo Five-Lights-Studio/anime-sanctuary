@@ -53,7 +53,7 @@ public class SecurityConfig {
                 // 노트 조회와 검색은 GET 요청에 한해서 인증 없이 접근 가능
                 .requestMatchers(HttpMethod.GET, "/api/notes", "/api/notes/search").permitAll()
                 // GET 메소드에 대해서만 노트 조회 허용, 그 외 POST, PUT, DELETE 등은 인증 필요
-                .requestMatchers("/api/notes/**").authenticated()  // 노트 생성, 수정, 삭제 등은 인증 필요
+                .requestMatchers("/api/notes/**").permitAll()  // 노트 생성, 수정, 삭제 등은 인증 필요
 
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()  // Swagger 관련 URL 접근 허용
                 .anyRequest().authenticated()  // 나머지 모든 요청은 인증 필요

@@ -4,30 +4,34 @@ import java.time.LocalDateTime;
 
 import com.fls.animecommunity.animesanctuary.model.note.Note;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-/*
- * Note의 Response , 응답객체
- */
-
-@Getter
-@NoArgsConstructor
+@Data
 public class NoteResponseDto {
-	private Long id;
+
+    private Long id;
     private String title;
     private String contents;
+    private String author;  // 작성자 이름 또는 ID
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private Long categoryId;
-    
-    public NoteResponseDto(Note entity) {
-        this.id = entity.getId();
-        this.title = entity.getTitle() != null ? entity.getTitle() : "No title";  // null 체크
-        this.contents = entity.getContents() != null ? entity.getContents() : "No contents";  // null 체크
-        this.createdAt = entity.getCreatedAt();
-        this.modifiedAt = entity.getModifiedAt();
-        this.categoryId = entity.getCategory() != null ? entity.getCategory().getId() : null;
-    }    
-}
 
+    // 기본 생성자 추가
+    public NoteResponseDto() {
+    }
+
+    public NoteResponseDto(Note note) {
+        this.id = note.getId();
+        this.title = note.getTitle();
+        this.contents = note.getContents();
+        this.author = note.getMember().getUsername();  // 작성자의 이름이나 유저네임
+        this.createdAt = note.getCreatedAt();
+        this.modifiedAt = note.getModifiedAt();
+        if (note.getCategory() != null) {
+            this.categoryId = note.getCategory().getId();
+        } else {
+            this.categoryId = null;
+        }
+    }
+}

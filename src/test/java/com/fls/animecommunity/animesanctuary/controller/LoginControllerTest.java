@@ -1,6 +1,7 @@
 package com.fls.animecommunity.animesanctuary.controller;
 
 import com.fls.animecommunity.animesanctuary.controller.rest.PageController;
+import com.fls.animecommunity.animesanctuary.model.note.Note;
 import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
 import com.fls.animecommunity.animesanctuary.service.interfaces.NoteService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +43,8 @@ class PageControllerTest {
     @Test
     void testGetPost() throws Exception {
         Long noteId = 1L;
-        NoteResponseDto noteResponseDto = new NoteResponseDto(); // 필요한 필드 초기화
+        Note note = new Note(); // Note 객체 생성
+        NoteResponseDto noteResponseDto = new NoteResponseDto(note); // Note 객체를 전달하여 NoteResponseDto 생성
         when(noteService.getNote(noteId)).thenReturn(noteResponseDto);
 
         mockMvc.perform(get("/topic/read/{note_id}", noteId))

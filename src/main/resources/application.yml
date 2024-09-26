@@ -20,6 +20,7 @@ spring:
         format-sql: true
   servlet:
     multipart:
+      enabled: true # 멀티파트 파일 업로드 활성화
       max-file-size: 10MB # 한 파일당 최대 용량 제한
       max-request-size: 50MB # 모든 파일의 최대 용량 제한
   data:
@@ -48,10 +49,8 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
-    # enabled: false
   swagger-ui:
     path: /swagger-ui.html
-    # enabled: false
 
 file:
   upload-dir: uploads/profile-images/

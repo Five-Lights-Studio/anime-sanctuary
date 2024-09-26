@@ -33,7 +33,7 @@ class NoteServiceImplTest {
     private NoteRepository noteRepository;
 
     @Mock
-    private CategoryRepository categoryRepository;  // CategoryRepository를 목으로 추가
+    private CategoryRepository categoryRepository;
 
     @Mock
     private MemberRepository memberRepository;
@@ -48,8 +48,9 @@ class NoteServiceImplTest {
 
     @Test
     void getNote_shouldReturnNoteResponseDto_whenNoteExists() {
-        // Note 객체를 생성
+        // Note 객체를 생성하고 ID 값 설정
         Note note = new Note();
+        note.setId(1L);
         note.setTitle("Test Note");
         note.setContents("Test Contents");
 
@@ -62,6 +63,7 @@ class NoteServiceImplTest {
         assertNotNull(responseDto);
         assertEquals("Test Note", responseDto.getTitle());
         assertEquals("Test Contents", responseDto.getContents());
+        assertEquals(1L, responseDto.getId());
     }
 
     @Test
@@ -83,6 +85,7 @@ class NoteServiceImplTest {
 
         // Note 객체 생성 및 저장 로직 목 설정
         Note savedNote = new Note();
+        savedNote.setId(1L);
         savedNote.setTitle("Test Note");
         savedNote.setContents("Test Contents");
         savedNote.setCategory(category);
@@ -95,6 +98,7 @@ class NoteServiceImplTest {
 
         assertNotNull(responseDto);
         assertEquals("Test Note", responseDto.getTitle());
+        assertEquals(1L, responseDto.getId());
         verify(noteRepository, times(1)).save(any(Note.class));
     }
 
@@ -111,6 +115,7 @@ class NoteServiceImplTest {
 
         // Note 객체 생성 및 저장
         Note note = new Note();
+        note.setId(1L);
         note.setTitle("Original Title");
         note.setContents("Original Contents");
         note.setMember(member);  // 작성자는 ID 1
@@ -118,6 +123,7 @@ class NoteServiceImplTest {
         when(noteRepository.findById(anyLong())).thenReturn(Optional.of(note));
 
         // 다른 사용자가 수정하려고 하면 예외 발생
-        assertThrows(IllegalStateException.class, () -> noteService.updateNote(1L, requestDto));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> noteService.updateNote(1L, requestDto));
+        assertEquals("이 노트를 수정할 권한이 없습니다.", exception.getMessage());
     }
 }

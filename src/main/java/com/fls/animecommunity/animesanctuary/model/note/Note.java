@@ -36,19 +36,17 @@ public class Note extends Timestamped {
     @Column(nullable = false)
     private String contents;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;  // 작성자를 나타내는 필드
+
     private Long hit;
 
     @ManyToOne
-    @JoinColumn(name = "categoryId", nullable = true)
+    @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    // 기존의 String 기반 tags 필드를 삭제
-    // @ElementCollection
-    // private List<String> tags;
+    private String imagePath;  // 이미지 경로 필드
 
     // 새로운 Tag 엔티티와의 ManyToMany 관계
     @ManyToMany(mappedBy = "notes")
@@ -57,21 +55,24 @@ public class Note extends Timestamped {
     @ManyToMany(mappedBy = "savedNotes")
     private Set<Member> savedByMembers;
 
-    public Note(NoteRequestsDto requestsDto) {
+    // 생성자
+    public Note(String title, String contents, Member member) {
+        this.title = title;
+        this.contents = contents;
+        this.member = member;
+    }
+
+    // update 메서드
+    public void update(NoteRequestsDto requestsDto) {
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         if (requestsDto.getCategoryId() != null) {
-            // Category를 가져와서 설정하는 로직 추가 (예: CategoryService를 사용해 가져오기)
+            // 필요 시 카테고리 업데이트 로직 추가
         }
     }
-
-    public void update(NoteRequestsDto requestsDto) {
-        setContents(requestsDto.getContents());
-        setTitle(requestsDto.getTitle());
-        if (requestsDto.getCategoryId() != null) {
-            // Category를 가져와서 설정하는 로직 추가 (예: CategoryService를 사용해 가져오기)
-        } else {
-            this.category = null;
-        }
+    
+    // setCategory 메서드
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

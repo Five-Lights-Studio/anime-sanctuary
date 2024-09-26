@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
-@CrossOrigin(origins = {"http://localhost:9000/", "http://localhost:5501"})
+@CrossOrigin(origins = {"http://localhost:9000", "http://127.0.0.1:5501"})
 @Slf4j
 public class MemberController {
 

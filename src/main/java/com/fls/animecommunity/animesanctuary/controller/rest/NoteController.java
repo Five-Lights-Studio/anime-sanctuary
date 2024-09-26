@@ -1,5 +1,6 @@
 package com.fls.animecommunity.animesanctuary.controller.rest;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
@@ -26,13 +29,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/*
- * NoteController 클래스 : Note의 CRUD 기능을 담당하며, API 매핑을 처리
- * 의존성 주입 : NoteService와 MemberService
- * 주요 메소드 : createNote, getNotes, getNote, updateNote, deleteNote
- * 파라미터 : NoteResponseDto, NoteRequestsDto, SuccessResponseDto
- */
-@CrossOrigin(origins = "http://localhost:9000") // 클라이언트의 도메인 명시
+@CrossOrigin(origins = {"http://localhost:9000", "http://127.0.0.1:5501"}) 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/notes")
@@ -41,28 +38,31 @@ public class NoteController {
 
     // 의존성 주입
     private final NoteService noteService;
-    private final MemberService memberService;
+    private final MemberService memberService;  // MemberService 추가
 
-    // 노트 생성
-    @PostMapping
-    public ResponseEntity<?> createNote(@Valid @RequestBody NoteRequestsDto requestsDto
-                                        ,BindingResult result) {
-        log.info("createNote 실행");
+    //create Note
+    @PostMapping(consumes = { "multipart/form-data" })
+    public ResponseEntity<?> createNote(@RequestPart("note") @Valid NoteRequestsDto requestsDto,
+                                        @RequestPart("image") MultipartFile image,
+                                        BindingResult result) {
         log.info("Received Note request with title: {} and contents: {}", requestsDto.getTitle(), requestsDto.getContents());
-        
-        // 유효성 검사 오류 확인
+
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(result.getAllErrors());
         }
-        
-        NoteResponseDto responseDto = noteService.createNote(requestsDto);
-        return ResponseEntity.ok(responseDto);
+
+        try {
+            NoteResponseDto responseDto = noteService.createNoteWithImage(requestsDto, image);
+            return ResponseEntity.ok(responseDto);
+        } catch (IOException e) {
+            log.error("Error occurred while uploading the image: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Image upload failed: " + e.getMessage());
+        }
     }
 
-    // 노트 목록 조회
+    //list Note
     @GetMapping
     public ResponseEntity<List<NoteResponseDto>> getNotes() {
-        //log.info("getNotes 실행");
         List<NoteResponseDto> list = noteService.getNotes();
         return ResponseEntity.ok(list);
     }
@@ -70,7 +70,6 @@ public class NoteController {
     // 특정 ID로 노트 조회
     @GetMapping("/{noteId}")
     public ResponseEntity<NoteResponseDto> getNote(@PathVariable("noteId") Long id) {
-        //log.info("getNote 실행");
         NoteResponseDto note = noteService.getNote(id);
         return ResponseEntity.ok(note);
     }
@@ -80,8 +79,6 @@ public class NoteController {
     public ResponseEntity<?> updateNote(@Valid @PathVariable("noteId") Long id, 
                                         @RequestBody NoteRequestsDto requestsDto
                                         ,BindingResult result) throws Exception {
-        //log.info("updateNote 실행");
-        // 유효성 검사 오류 확인
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(result.getAllErrors());
         }
@@ -94,7 +91,6 @@ public class NoteController {
     @DeleteMapping("/{noteId}")
     public ResponseEntity<SuccessResponseDto> deleteNote(@PathVariable("noteId") Long id, 
                                                         @RequestParam("memberId") Long memberId) throws Exception {
-        //log.info("deleteNote 실행");
         SuccessResponseDto responseDto = noteService.deleteNote(id, memberId);
         return ResponseEntity.ok(responseDto);
     }
