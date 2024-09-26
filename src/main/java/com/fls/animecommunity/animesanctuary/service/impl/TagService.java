@@ -42,6 +42,6 @@ public class TagService {
     }
 
     public List<Note> getNotesByTag(String tagName) {
-        return noteRepository.findByTags_Name(tagName);
-    }
+        return noteRepository.findByTagEntities_Name(tagName);
+    }    
 }

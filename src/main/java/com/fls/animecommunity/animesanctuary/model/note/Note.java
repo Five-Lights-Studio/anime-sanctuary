@@ -8,7 +8,6 @@ import com.fls.animecommunity.animesanctuary.model.tag.Tag;
 import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,22 +46,13 @@ public class Note extends Timestamped {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    // Getter and Setter - member
-    public Member getMember() {
-        return member;
-    }
+    // 기존의 String 기반 tags 필드를 삭제
+    // @ElementCollection
+    // private List<String> tags;
 
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    // 기존 String 기반의 tags 필드 유지
-    @ElementCollection
-    private List<String> tags;
-
-    // 새로운 Tag 엔티티와의 관계
+    // 새로운 Tag 엔티티와의 ManyToMany 관계
     @ManyToMany(mappedBy = "notes")
-    private List<Tag> tagEntities;  // 새로운 List<Tag> 필드 추가
+    private List<Tag> tagEntities;  // Tag 엔티티와의 연관관계 필드
 
     @ManyToMany(mappedBy = "savedNotes")
     private Set<Member> savedByMembers;

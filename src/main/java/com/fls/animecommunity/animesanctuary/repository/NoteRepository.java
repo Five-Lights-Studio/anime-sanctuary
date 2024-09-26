@@ -18,5 +18,5 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 	
 	// 제목이나 내용에 검색어가 포함된 노트를 찾는 메서드
     List<Note> findByTitleContainingOrContentsContaining(String titleKeyword, String contentsKeyword);
-	List<Note> findByTags_Name(String tagName);
+	List<Note> findByTagEntities_Name(String tagName);
 }
