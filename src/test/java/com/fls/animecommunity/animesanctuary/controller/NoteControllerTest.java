@@ -37,7 +37,7 @@ class NoteControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
+    }    
 
     @Test
     void createNote_shouldReturnOk_whenValidRequestIsGiven() throws IOException {

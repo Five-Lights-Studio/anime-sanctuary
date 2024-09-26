@@ -28,10 +28,9 @@ class PageControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(pageController).build();
-    }
+    }    
 
     @Test
     void testList() throws Exception {
