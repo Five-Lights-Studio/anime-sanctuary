@@ -3,6 +3,8 @@ package com.fls.animecommunity.animesanctuary.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -102,10 +104,19 @@ public class MemberController {
 			log.info("in if member : {} ", member);
 			request.getSession().setAttribute("user", member);
 			
-			// 성공 메시지 반환
-	        return ResponseEntity.ok("Login Success! Welcome, " + member.getUsername());
+			 // JSON 형식으로 성공 메시지 반환
+	        Map<String, String> responseBody = new HashMap<>();
+	        responseBody.put("message", "Login Success! Welcome, " + member.getUsername());
+	        responseBody.put("username", member.getUsername());
+	        
+	        return ResponseEntity.ok(responseBody);  // JSON 형태로 반환
 		} else {
 			log.info("in else member : {} ", member);
+			
+			// JSON 형식으로 에러 메시지 반환
+	        Map<String, String> errorBody = new HashMap<>();
+	        errorBody.put("message", "Invalid username/email or password");
+			
 			return ResponseEntity.status(401).body("Invalid username/email or password");
 		}
 	}
