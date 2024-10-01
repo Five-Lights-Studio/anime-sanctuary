@@ -3,12 +3,13 @@ package com.fls.animecommunity.animesanctuary.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,17 +26,18 @@ import com.fls.animecommunity.animesanctuary.dto.MemberRegisterDto;
 import com.fls.animecommunity.animesanctuary.model.UpdateProfileRequest;
 import com.fls.animecommunity.animesanctuary.model.member.GenderType;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
+import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.service.impl.MemberService;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.io.Decoders;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,7 +46,11 @@ import io.jsonwebtoken.io.Decoders;
 @Slf4j
 public class MemberController {
 
-	private final MemberService memberService;
+	@Autowired
+	private MemberRepository memberRepository;
+
+	@Autowired
+	private MemberService memberService;
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody MemberRegisterDto memberDto
