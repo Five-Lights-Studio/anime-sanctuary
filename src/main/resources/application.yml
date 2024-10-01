@@ -45,6 +45,9 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
 
+jwt:
+  secret: CiRF4X2C26zRWKdAd6f7+RsXmR4fy5e/112WZev0JDs=
+
 springdoc:
   api-docs:
     path: /api-docs

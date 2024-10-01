@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 
+// Member entity 관리하기 위한 repository!
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByUsername(String username);

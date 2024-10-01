@@ -50,6 +50,11 @@ dependencies {
 	testImplementation 'org.mockito:mockito-core:5.13.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter' // 테스트에 필요한 패키지!
 
+	// jwt
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	// https://charactermail.tistory.com/491
 }
 
 tasks.named('test') {

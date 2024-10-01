@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.io.Decoders;
 
 @RestController
 @RequiredArgsConstructor
@@ -88,6 +93,9 @@ public class MemberController {
 	}
 
 
+	@Value("${jwt.secret}")
+	private String jwtSecret;
+
 	// login 로그인
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request,
@@ -98,14 +106,15 @@ public class MemberController {
 		log.info("member : {} ", member);
 		
 		if (member != null) {
-			// 세션 생성
-			log.info("in if member : {} ", member);
-			request.getSession().setAttribute("user", member);
-			
-			// 성공 메시지 반환
-	        return ResponseEntity.ok("Login Success! Welcome, " + member.getUsername());
+			String token = Jwts.builder()
+					.setSubject(member.getUsername())
+					.setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day
+					// 주의 : 가려야함! secret key는 노출되면 안됨 (OpenSSL 로 인코딩함. base64)
+					.signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode("jwtSecret")), SignatureAlgorithm.HS512)
+					.compact();
+	
+			return ResponseEntity.ok(token);
 		} else {
-			log.info("in else member : {} ", member);
 			return ResponseEntity.status(401).body("Invalid username/email or password");
 		}
 	}
@@ -227,6 +236,15 @@ public class MemberController {
 			return ResponseEntity.ok(member.get());
 		} else {
 			return ResponseEntity.status(404).build(); // Not Found
+		}
+	}
+
+	public Member register(Member member) {
+		try {
+			return memberRepository.save(member);
+		} catch (Exception e) {
+			log.error("Error registering member", e);
+			throw new RuntimeException("Error registering member");
 		}
 	}
 }

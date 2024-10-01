@@ -9,13 +9,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fls.animecommunity.animesanctuary.model.UpdateProfileRequest;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
-import com.fls.animecommunity.animesanctuary.model.member.Role;
 import com.fls.animecommunity.animesanctuary.model.note.Note;
 import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
@@ -146,12 +146,25 @@ public class MemberService {
 
     @Transactional
     public Member registerOrLoginWithSocial(String name, String email, String provider, String providerId) {
-        return memberRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    Member newMember = new Member(name, email, provider, providerId, Role.USER);
-                    newMember.setPassword("");
-                    return memberRepository.save(newMember);
-                });
+        Member member = memberRepository.findByEmail(email)
+                .orElse(new Member());
+        member.setEmail(email);
+        member.setName(name);
+        member.setProvider(provider);
+        member.setProviderId(providerId);
+        return memberRepository.save(member);
+    }
+
+    @Transactional
+    public void saveOrUpdateMember(OidcUser oidcUser) {
+        String email = oidcUser.getEmail();
+        Member member = memberRepository.findByEmail(email)
+                .orElse(new Member());
+        member.setEmail(email);
+        member.setName(oidcUser.getFullName());
+        member.setProvider("google");
+        member.setProviderId(oidcUser.getAttribute("sub"));
+        memberRepository.save(member);
     }
 
     @Transactional
