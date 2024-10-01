@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fls.animecommunity.animesanctuary.dto.LoginRequest;
+import com.fls.animecommunity.animesanctuary.dto.LoginResponse;
 import com.fls.animecommunity.animesanctuary.dto.MemberRegisterDto;
 import com.fls.animecommunity.animesanctuary.model.UpdateProfileRequest;
 import com.fls.animecommunity.animesanctuary.model.member.GenderType;
@@ -102,8 +102,9 @@ public class MemberController {
 			log.info("in if member : {} ", member);
 			request.getSession().setAttribute("user", member);
 			
-			// 성공 메시지 반환
-	        return ResponseEntity.ok("Login Success! Welcome, " + member.getUsername());
+			// 로그인 성공 시, memberId를 포함한 응답 반환
+	        return ResponseEntity.ok(new LoginResponse(member.getId(), "Login Success! Welcome, " + member.getUsername()));
+
 		} else {
 			log.info("in else member : {} ", member);
 			return ResponseEntity.status(401).body("Invalid username/email or password");
