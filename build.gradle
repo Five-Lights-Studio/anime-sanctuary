@@ -29,8 +29,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -49,6 +47,9 @@ dependencies {
 	// test
 	testImplementation 'org.mockito:mockito-core:5.13.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter' // 테스트에 필요한 패키지!
+
+	// Firebase Admin SDK
+    implementation 'com.google.firebase:firebase-admin:9.3.0' // https://firebase.google.com/support/release-notes/admin/java
 
 }
 

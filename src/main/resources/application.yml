@@ -45,6 +45,11 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
 
+firebase:
+  config:
+    path: "src/main/resources/serviceAccountKey.json"  # 서비스 계정 파일의 경로를 설정
+
+
 springdoc:
   api-docs:
     path: /api-docs

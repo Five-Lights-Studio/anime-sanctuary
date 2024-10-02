@@ -38,3 +38,4 @@ out/
 
 ## top secret - sensitive data
 .env
+serviceAccountKey.json
