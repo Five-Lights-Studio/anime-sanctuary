@@ -50,13 +50,13 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/notes", "/api/notes/search").permitAll()
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
                 .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                    .userService(this.oauth2UserService())
-                )
-                .defaultSuccessUrl("http://localhost:5501/index.html")
-                .failureUrl("http://localhost:5501/login.html")
+//            )
+//            .oauth2Login(oauth2 -> oauth2
+//                .userInfoEndpoint(userInfo -> userInfo
+//                    .userService(this.oauth2UserService())
+//                )
+//                .defaultSuccessUrl("http://localhost:5501/index.html")
+//                .failureUrl("http://localhost:5501/login.html")
             );
 
         return http.build();
