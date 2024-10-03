@@ -71,7 +71,8 @@ public class NoteServiceImpl implements NoteService {
         // 노트 생성
         Note note = new Note();
         note.setTitle(requestsDto.getTitle());
-        note.setContents(requestsDto.getContents());
+        //contents HTML 태그 제거
+        note.setContents(stripHtmlTags(requestsDto.getContents()));
         note.setCategory(category);
         note.setMember(member);  // 작성자 정보 추가
 
@@ -94,7 +95,11 @@ public class NoteServiceImpl implements NoteService {
         if (!note.getMember().getId().equals(requestsDto.getMemberId())) {
             throw new IllegalStateException("이 노트를 수정할 권한이 없습니다.");
         }
-
+        
+        //HTML 태그 제거
+        stripHtmlTags(requestsDto.getContents());
+        
+        //
         note.update(requestsDto);
         log.info("노트가 성공적으로 수정되었습니다. ID: {}", id);
 
@@ -132,4 +137,10 @@ public class NoteServiceImpl implements NoteService {
                     .map(NoteResponseDto::new)
                     .collect(Collectors.toList());
     }
+    
+    //HTML 태그 제거 method 
+    public String stripHtmlTags(String input) {
+        return input.replaceAll("<[^>]*>", ""); // 모든 HTML 태그를 제거
+    }
+
 }
