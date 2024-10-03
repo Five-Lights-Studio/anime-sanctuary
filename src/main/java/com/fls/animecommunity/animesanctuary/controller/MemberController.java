@@ -3,6 +3,7 @@ package com.fls.animecommunity.animesanctuary.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -109,7 +110,20 @@ public class MemberController {
 			return ResponseEntity.status(401).body("Invalid username/email or password");
 		}
 	}
+	
+	//get session data
+	@GetMapping("/session-data")
+	public ResponseEntity<?> getSessionData(HttpServletRequest request) {
+	    Member member = (Member) request.getSession().getAttribute("user");
+	    if (member != null) {
+	        return ResponseEntity.ok(Map.of("memberId", member.getId()));
+	    } else {
+	        return ResponseEntity.status(401).body("Not logged in");
+	    }
+	}
 
+	
+	
 	// logout 로그아웃
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request) {

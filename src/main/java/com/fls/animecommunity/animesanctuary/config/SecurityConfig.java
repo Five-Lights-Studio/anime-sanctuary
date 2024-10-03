@@ -44,7 +44,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 // 회원가입과 로그인 경로는 인증 없이 접근 가능
-                .requestMatchers("/api/members/register", "/api/members/login","/api/members/logout","/api/categories","/api/admin/categories","/api/notes").permitAll()
+                .requestMatchers("/api/members/session-data","/api/members/register", "/api/members/login","/api/members/logout","/api/categories","/api/admin/categories","/api/notes").permitAll()
                 // OAuth2 경로는 인증 필요
                 .requestMatchers("/api/members/**").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/notes", "/api/notes/search").permitAll()
