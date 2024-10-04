@@ -83,6 +83,13 @@ public class Member implements Serializable {
         this.gender = gender;
     }
     
+    public String getProfileImage() {
+        return profileImage;
+    }
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+    
     // 소셜 로그인 전용 생성자
     public Member(String name, String email, String provider, String providerId, Role role) {
         this.name = name;
