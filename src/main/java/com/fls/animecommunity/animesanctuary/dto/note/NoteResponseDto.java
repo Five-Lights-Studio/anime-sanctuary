@@ -20,6 +20,7 @@ public class NoteResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private Long categoryId;
+//    private String errorMessage;
     
     public NoteResponseDto(Note entity) {
         this.id = entity.getId();
