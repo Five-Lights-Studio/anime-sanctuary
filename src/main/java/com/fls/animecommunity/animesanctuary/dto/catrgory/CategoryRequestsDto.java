@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.model.category.dto;
+package com.fls.animecommunity.animesanctuary.dto.catrgory;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

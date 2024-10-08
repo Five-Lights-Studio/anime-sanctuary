@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.service.impl;
+package com.fls.animecommunity.animesanctuary.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +8,15 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fls.animecommunity.animesanctuary.dto.catrgory.CategoryRequestsDto;
+import com.fls.animecommunity.animesanctuary.dto.catrgory.CategoryResponseDto;
+import com.fls.animecommunity.animesanctuary.dto.catrgory.SuccessResponseDto;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
 import com.fls.animecommunity.animesanctuary.exception.ResourceNotFoundException;
 import com.fls.animecommunity.animesanctuary.model.category.Category;
-import com.fls.animecommunity.animesanctuary.model.category.dto.CategoryRequestsDto;
-import com.fls.animecommunity.animesanctuary.model.category.dto.CategoryResponseDto;
-import com.fls.animecommunity.animesanctuary.model.category.dto.SuccessResponseDto;
 import com.fls.animecommunity.animesanctuary.model.note.Note;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
 import com.fls.animecommunity.animesanctuary.repository.CategoryRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
-import com.fls.animecommunity.animesanctuary.service.interfaces.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +25,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryService {
 	
 	
 	private final CategoryRepository categoryRepository;
 	private final NoteRepository noteRepository;
 	
 	//getNotesByCategory 특정 category별 Notes 목록 조회
-	@Override
 	@Transactional(readOnly = true)
 	public List<NoteResponseDto> getNotesByCategory(Long categoryId ) {
 		
@@ -52,7 +50,6 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	//find All categoies 모든 카테고리를 가져옴
-	@Override
 	@Transactional(readOnly = true)
 	public List<CategoryResponseDto> getCategories() {
 		//		log.info("getCategories() 실행");
@@ -68,7 +65,6 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	//write , create
-	@Override
 	@Transactional
 	public CategoryResponseDto createCategory(CategoryRequestsDto requestsDto) {
 //		log.info("createCategory() 실행");
@@ -83,7 +79,6 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	//delete
-	@Override
 	@Transactional
 	public SuccessResponseDto deleteCategory(Long id) throws Exception{
 //		log.info("deleteCategory() 실행");
@@ -104,7 +99,6 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	//update
-	@Override
 	@Transactional
 	public CategoryResponseDto updateCategory(Long id, CategoryRequestsDto requestsDto) {
 //		log.info("updateCategory() 실행");

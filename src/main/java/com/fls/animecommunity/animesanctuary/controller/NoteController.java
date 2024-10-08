@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fls.animecommunity.animesanctuary.dto.note.NoteRequestsDto;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
+import com.fls.animecommunity.animesanctuary.dto.note.SuccessResponseDto;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
-import com.fls.animecommunity.animesanctuary.model.note.dto.SuccessResponseDto;
-import com.fls.animecommunity.animesanctuary.service.impl.MemberService;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteService;
+import com.fls.animecommunity.animesanctuary.service.MemberService;
+import com.fls.animecommunity.animesanctuary.service.NoteService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
  * 주요 메소드 : createNote, getNotes, getNote, updateNote, deleteNote
  * 파라미터 : NoteResponseDto, NoteRequestsDto, SuccessResponseDto
  */
-// @CrossOrigin(origins = { "http://localhost:9000/", "http://127.0.0.1:5501" }) // 클라이언트의 도메인 명시
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/notes")

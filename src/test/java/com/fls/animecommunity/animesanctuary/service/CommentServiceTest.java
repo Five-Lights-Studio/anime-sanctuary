@@ -21,8 +21,8 @@ import com.fls.animecommunity.animesanctuary.model.note.Note;
 import com.fls.animecommunity.animesanctuary.repository.CommentRepository;
 import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
-import com.fls.animecommunity.animesanctuary.service.impl.CommentService;
-import com.fls.animecommunity.animesanctuary.service.impl.NotificationService;
+import com.fls.animecommunity.animesanctuary.service.CommentService;
+import com.fls.animecommunity.animesanctuary.service.NotificationService;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.never;

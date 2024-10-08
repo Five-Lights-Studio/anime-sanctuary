@@ -17,15 +17,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
+import com.fls.animecommunity.animesanctuary.dto.note.NoteRequestsDto;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
 import com.fls.animecommunity.animesanctuary.model.category.Category;
 import com.fls.animecommunity.animesanctuary.model.note.Note;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.repository.CategoryRepository;
 import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
-import com.fls.animecommunity.animesanctuary.service.impl.NoteServiceImpl;
+import com.fls.animecommunity.animesanctuary.service.NoteService;
 
 class NoteServiceImplTest {
 
@@ -39,7 +39,7 @@ class NoteServiceImplTest {
     private MemberRepository memberRepository;
 
     @InjectMocks
-    private NoteServiceImpl noteService;
+    private NoteService noteService;
 
     @BeforeEach
     void setUp() {

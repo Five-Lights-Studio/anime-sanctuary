@@ -1,8 +1,9 @@
 package com.fls.animecommunity.animesanctuary.controller;
 
 import com.fls.animecommunity.animesanctuary.controller.PageController;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteService;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
+import com.fls.animecommunity.animesanctuary.service.NoteService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

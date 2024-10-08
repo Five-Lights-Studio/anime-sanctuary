@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.fls.animecommunity.animesanctuary.dto.noteLike.NoteLikeRequestDto;
+import com.fls.animecommunity.animesanctuary.dto.noteLike.NoteLikeResponseDto;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
-import com.fls.animecommunity.animesanctuary.model.noteLike.dto.NoteLikeRequestDto;
-import com.fls.animecommunity.animesanctuary.model.noteLike.dto.NoteLikeResponseDto;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteLikeService;
+import com.fls.animecommunity.animesanctuary.service.NoteLikeService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

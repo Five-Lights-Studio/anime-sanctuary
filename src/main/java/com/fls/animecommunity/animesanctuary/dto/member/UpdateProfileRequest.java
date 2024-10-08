@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.model;
+package com.fls.animecommunity.animesanctuary.dto.member;
 
 import java.time.LocalDate;
 

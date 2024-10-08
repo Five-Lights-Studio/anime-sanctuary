@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fls.animecommunity.animesanctuary.model.comment.Comment;
-import com.fls.animecommunity.animesanctuary.service.impl.CommentService;
+import com.fls.animecommunity.animesanctuary.service.CommentService;
 
 import lombok.RequiredArgsConstructor;
 

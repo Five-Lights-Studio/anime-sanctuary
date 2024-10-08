@@ -2,15 +2,14 @@ package com.fls.animecommunity.animesanctuary.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fls.animecommunity.animesanctuary.model.category.dto.CategoryRequestsDto;
-import com.fls.animecommunity.animesanctuary.model.category.dto.CategoryResponseDto;
-import com.fls.animecommunity.animesanctuary.model.category.dto.SuccessResponseDto;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
+import com.fls.animecommunity.animesanctuary.dto.catrgory.CategoryRequestsDto;
+import com.fls.animecommunity.animesanctuary.dto.catrgory.CategoryResponseDto;
+import com.fls.animecommunity.animesanctuary.dto.catrgory.SuccessResponseDto;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
 import com.fls.animecommunity.animesanctuary.repository.CategoryRepository;
-import com.fls.animecommunity.animesanctuary.service.impl.CategoryServiceImpl;
-import com.fls.animecommunity.animesanctuary.service.interfaces.CategoryService;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteService;
+import com.fls.animecommunity.animesanctuary.service.CategoryService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -36,39 +35,61 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @RequestMapping("api/categories")
 public class CategoryController {
-	
+
 	private final CategoryService categoryService;
-	
-	
-	//Category 에 해당하는 Notes조회
+
+	// create category
+	@PostMapping("/categories")
+	public ResponseEntity<CategoryResponseDto> createCategory(@Valid @RequestBody CategoryRequestsDto requestsDto) {
+		// 카테고리 생성 로직 호출
+		CategoryResponseDto responseDto = categoryService.createCategory(requestsDto);
+//			log.info("create category 실행");
+		return ResponseEntity.ok(responseDto);
+	}
+
+	// 카테고리 삭제
+	@DeleteMapping("/categories/{categoryId}")
+	public ResponseEntity<SuccessResponseDto> deleteNote(@PathVariable("categoryId") Long id) throws Exception {
+//			log.info("delete category 실행");
+		SuccessResponseDto responseDto = categoryService.deleteCategory(id);
+		return ResponseEntity.ok(responseDto);
+	}
+
+	// 카테고리 수정
+	@PostMapping("/categories/{categoryId}")
+	public ResponseEntity<CategoryResponseDto> updateCategory(@Valid @PathVariable("categoryId") Long id,
+			@RequestBody CategoryRequestsDto requestsDto) throws Exception {
+//			log.info("update category 실행");
+		CategoryResponseDto responseDto = categoryService.updateCategory(id, requestsDto);
+		return ResponseEntity.ok(responseDto);
+	}
+
+	// Category 에 해당하는 Notes조회
 	@GetMapping("/{categoryId}/notes")
-    public ResponseEntity<?> getNotesByCategory(@PathVariable("categoryId") Long categoryId) {
-        
-		//log.info("getNotesByCategory 실행");
+	public ResponseEntity<?> getNotesByCategory(@PathVariable("categoryId") Long categoryId) {
+
+		// log.info("getNotesByCategory 실행");
 		List<NoteResponseDto> notes = categoryService.getNotesByCategory(categoryId);
 
-        if (notes.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+		if (notes.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
 
-        return ResponseEntity.ok(notes);
-    }
-	
-	//Category list
+		return ResponseEntity.ok(notes);
+	}
+
+	// Category list
 	@GetMapping
-    public ResponseEntity<?> getCategories() {
-        
-		//log.info("getCategories 실행");
+	public ResponseEntity<?> getCategories() {
+
+		// log.info("getCategories 실행");
 		List<CategoryResponseDto> categories = categoryService.getCategories();
 
-        if (categories.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+		if (categories.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
 
-        return ResponseEntity.ok(categories);
-    }
-	
-	
-	
-	
+		return ResponseEntity.ok(categories);
+	}
+
 }

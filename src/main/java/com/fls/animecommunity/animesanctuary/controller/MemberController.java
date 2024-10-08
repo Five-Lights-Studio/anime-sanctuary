@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fls.animecommunity.animesanctuary.dto.LoginRequest;
-import com.fls.animecommunity.animesanctuary.dto.MemberRegisterDto;
-import com.fls.animecommunity.animesanctuary.model.UpdateProfileRequest;
+import com.fls.animecommunity.animesanctuary.dto.member.LoginRequest;
+import com.fls.animecommunity.animesanctuary.dto.member.MemberRegisterDto;
+import com.fls.animecommunity.animesanctuary.dto.member.UpdateProfileRequest;
 import com.fls.animecommunity.animesanctuary.model.member.GenderType;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
-import com.fls.animecommunity.animesanctuary.service.impl.MemberService;
+import com.fls.animecommunity.animesanctuary.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,68 +42,66 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@Valid @RequestBody MemberRegisterDto memberDto
-										, BindingResult result) {
+	public ResponseEntity<?> register(@Valid @RequestBody MemberRegisterDto memberDto, BindingResult result) {
 
-	    // 호출 확인 로그
-	    log.info("call MemberController register()");
-	    log.info("회원가입 요청 도착: /api/members/register");
-	    log.info("memberDto : {}",memberDto);
-	    
-	    // 유효성 검사에서 에러가 있으면 에러 메시지를 반환
-	    if (result.hasErrors()) {
-	    	
-	    	log.info("result : {}",result);
-	        StringBuilder errorMessage = new StringBuilder();
-	        result.getFieldErrors().forEach(error -> {
-	            errorMessage.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ");
-	        });
-	        return ResponseEntity.badRequest().body(errorMessage.toString());
-	    }
+		// 호출 확인 로그
+		log.info("call MemberController register()");
+		log.info("회원가입 요청 도착: /api/members/register");
+		log.info("memberDto : {}", memberDto);
 
-	    // Create a new Member object from the DTO
-	    Member member = new Member();
-	    member.setUsername(memberDto.getUsername());
-	    member.setPassword(memberDto.getPassword());  // 비밀번호는 해시 처리 필요
-	    member.setName(memberDto.getName());
-	    member.setEmail(memberDto.getEmail());
+		// 유효성 검사에서 에러가 있으면 에러 메시지를 반환
+		if (result.hasErrors()) {
 
-	    // Gender 변환 중 유효하지 않은 값이 들어오면 예외 처리 , valueOf 예외발생가능성 있음.
-	    try {
-	        member.setGender(GenderType.valueOf(memberDto.getGender().toUpperCase()));
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.badRequest().body("Invalid gender value: " + memberDto.getGender());
-	    }
+			log.info("result : {}", result);
+			StringBuilder errorMessage = new StringBuilder();
+			result.getFieldErrors().forEach(error -> {
+				errorMessage.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ");
+			});
+			return ResponseEntity.badRequest().body(errorMessage.toString());
+		}
 
-	    member.setBirth(memberDto.getBirth());
-	    
-	    log.info("member : {}",member);
-	    
-	    // 회원 등록 서비스 호출
-	    Member registeredMember = memberService.register(member);
-	    
-	    log.info("registeredMember : {}",registeredMember);
-	    
-	    return ResponseEntity.ok(registeredMember);
+		// Create a new Member object from the DTO
+		Member member = new Member();
+		member.setUsername(memberDto.getUsername());
+		member.setPassword(memberDto.getPassword()); // 비밀번호는 해시 처리 필요
+		member.setName(memberDto.getName());
+		member.setEmail(memberDto.getEmail());
+
+		// Gender 변환 중 유효하지 않은 값이 들어오면 예외 처리 , valueOf 예외발생가능성 있음.
+		try {
+			member.setGender(GenderType.valueOf(memberDto.getGender().toUpperCase()));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body("Invalid gender value: " + memberDto.getGender());
+		}
+
+		member.setBirth(memberDto.getBirth());
+
+		log.info("member : {}", member);
+
+		// 회원 등록 서비스 호출
+		Member registeredMember = memberService.register(member);
+
+		log.info("registeredMember : {}", registeredMember);
+
+		return ResponseEntity.ok(registeredMember);
 	}
-
 
 	// login 로그인
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request,
-									HttpServletResponse response) {
-		
+			HttpServletResponse response) {
+
 		Member member = memberService.login(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
-		
+
 		log.info("member : {} ", member);
-		
+
 		if (member != null) {
 			// 세션 생성
 			log.info("in if member : {} ", member);
 			request.getSession().setAttribute("user", member);
-			
+
 			// 성공 메시지 반환
-	        return ResponseEntity.ok("Login Success! Welcome, " + member.getUsername());
+			return ResponseEntity.ok("Login Success! Welcome, " + member.getUsername());
 		} else {
 			log.info("in else member : {} ", member);
 			return ResponseEntity.status(401).body("Invalid username/email or password");
@@ -113,7 +111,7 @@ public class MemberController {
 	// logout 로그아웃
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request) {
-		
+
 		// 세션 무효화
 		request.getSession().invalidate();
 		return ResponseEntity.ok("Logout successful");
@@ -122,11 +120,11 @@ public class MemberController {
 	// deleteMember 회원삭제
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> deleteMember(@PathVariable("id") Long id, @RequestParam("username") String username,
-											@RequestParam("password") String password, HttpServletRequest request) {
-		
+			@RequestParam("password") String password, HttpServletRequest request) {
+
 		// 로그인 여부 확인
 		Member loggedInMember = (Member) request.getSession().getAttribute("user");
-		
+
 		if (loggedInMember == null) {
 			return ResponseEntity.status(403).build(); // 로그인하지 않은 경우, Forbidden
 		}

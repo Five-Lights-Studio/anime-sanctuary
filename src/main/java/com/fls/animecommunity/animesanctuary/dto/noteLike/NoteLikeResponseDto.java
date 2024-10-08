@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.model.noteLike.dto;
+package com.fls.animecommunity.animesanctuary.dto.noteLike;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

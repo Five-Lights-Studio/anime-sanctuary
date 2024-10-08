@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
-import com.fls.animecommunity.animesanctuary.service.impl.MemberService;
+import com.fls.animecommunity.animesanctuary.service.MemberService;
 
 class MemberServiceTest {
 

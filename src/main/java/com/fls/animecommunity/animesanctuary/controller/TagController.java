@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.controller.rest;
+package com.fls.animecommunity.animesanctuary.controller;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fls.animecommunity.animesanctuary.model.tag.Tag;
-import com.fls.animecommunity.animesanctuary.service.impl.TagService;
+import com.fls.animecommunity.animesanctuary.service.TagService;
 
 @RestController
 @RequestMapping("/api/tags")

@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.service.impl;
+package com.fls.animecommunity.animesanctuary.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,17 +6,16 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fls.animecommunity.animesanctuary.dto.note.NoteRequestsDto;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
+import com.fls.animecommunity.animesanctuary.dto.note.SuccessResponseDto;
 import com.fls.animecommunity.animesanctuary.exception.ResourceNotFoundException;
 import com.fls.animecommunity.animesanctuary.model.category.Category;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.model.note.Note;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
-import com.fls.animecommunity.animesanctuary.model.note.dto.SuccessResponseDto;
 import com.fls.animecommunity.animesanctuary.repository.CategoryRepository;
 import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NoteServiceImpl implements NoteService {
+public class NoteService {
 
     private final NoteRepository noteRepository;
     private final CategoryRepository categoryRepository;
@@ -34,7 +33,6 @@ public class NoteServiceImpl implements NoteService {
     private static final String ID_NOT_FOUND_MESSAGE = "아이디가 존재하지 않습니다.: ";
 
     // 모든 노트 목록 조회
-    @Override
     @Transactional(readOnly = true)
     public List<NoteResponseDto> getNotes() {
         log.info("수정일 기준으로 정렬된 모든 노트를 가져옵니다.");
@@ -45,7 +43,6 @@ public class NoteServiceImpl implements NoteService {
     }
 
     // 특정 ID로 노트 조회
-    @Override
     @Transactional(readOnly = true)
     public NoteResponseDto getNote(Long id) {
         log.info("ID로 노트를 조회합니다. ID: {}", id);
@@ -55,7 +52,6 @@ public class NoteServiceImpl implements NoteService {
     }
 
     // 새로운 노트 생성 (인증된 사용자 필요)
-    @Override
     @Transactional
     public NoteResponseDto createNote(NoteRequestsDto requestsDto) {
         log.info("새로운 노트를 생성합니다. 제목: {}", requestsDto.getTitle());
@@ -82,7 +78,6 @@ public class NoteServiceImpl implements NoteService {
     }
 
     // 기존 노트 수정 (인증된 사용자 필요)
-    @Override
     @Transactional
     public NoteResponseDto updateNote(Long id, NoteRequestsDto requestsDto) {
         log.info("ID로 노트를 수정합니다. ID: {}", id);
@@ -102,7 +97,6 @@ public class NoteServiceImpl implements NoteService {
     }
 
     // 노트 삭제 (인증된 사용자 필요)
-    @Override
     @Transactional
     public SuccessResponseDto deleteNote(Long id, Long memberId) {
         log.info("ID로 노트를 삭제합니다. ID: {}", id);
@@ -122,7 +116,6 @@ public class NoteServiceImpl implements NoteService {
     }
 
     // 키워드로 노트 검색
-    @Override
     @Transactional(readOnly = true)
     public List<NoteResponseDto> searchNotes(String keyword) {
         log.info("키워드로 노트를 검색합니다. 키워드: {}", keyword);

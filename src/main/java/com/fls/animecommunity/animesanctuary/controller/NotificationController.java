@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.fls.animecommunity.animesanctuary.model.notification.Notification;
-import com.fls.animecommunity.animesanctuary.service.impl.NotificationService;
+import com.fls.animecommunity.animesanctuary.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 

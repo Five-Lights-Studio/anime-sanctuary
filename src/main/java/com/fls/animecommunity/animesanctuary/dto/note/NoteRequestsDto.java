@@ -1,8 +1,8 @@
-package com.fls.animecommunity.animesanctuary.model.note.dto;
+package com.fls.animecommunity.animesanctuary.dto.note;
 
 import java.time.LocalDate;
 
-import com.fls.animecommunity.animesanctuary.dto.MemberRegisterDto;
+import com.fls.animecommunity.animesanctuary.dto.member.MemberRegisterDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -38,5 +38,4 @@ public class NoteRequestsDto {
 
     private Long categoryId;
 
-    private Long memberId;
 }

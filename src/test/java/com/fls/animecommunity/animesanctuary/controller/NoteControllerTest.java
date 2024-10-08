@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import com.fls.animecommunity.animesanctuary.controller.NoteController;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteService;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteRequestsDto;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
+import com.fls.animecommunity.animesanctuary.service.NoteService;
 
 class NoteControllerTest {
 

@@ -3,9 +3,9 @@ package com.fls.animecommunity.animesanctuary.model.note;
 import java.util.List;
 import java.util.Set;
 
+import com.fls.animecommunity.animesanctuary.dto.note.NoteRequestsDto;
 import com.fls.animecommunity.animesanctuary.model.category.Category;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteRequestsDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;

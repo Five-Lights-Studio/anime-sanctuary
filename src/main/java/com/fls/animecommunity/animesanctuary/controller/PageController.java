@@ -1,7 +1,8 @@
 package com.fls.animecommunity.animesanctuary.controller;
 
-import com.fls.animecommunity.animesanctuary.model.note.dto.NoteResponseDto;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteService;
+import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
+import com.fls.animecommunity.animesanctuary.service.NoteService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.service.impl;
+package com.fls.animecommunity.animesanctuary.service;
 
 import java.util.Optional;
 
@@ -6,15 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fls.animecommunity.animesanctuary.dto.noteLike.NoteLikeRequestDto;
+import com.fls.animecommunity.animesanctuary.dto.noteLike.NoteLikeResponseDto;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.model.note.Note;
 import com.fls.animecommunity.animesanctuary.model.noteLike.NoteLike;
-import com.fls.animecommunity.animesanctuary.model.noteLike.dto.NoteLikeRequestDto;
-import com.fls.animecommunity.animesanctuary.model.noteLike.dto.NoteLikeResponseDto;
 import com.fls.animecommunity.animesanctuary.repository.MemberRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteLikeRepository;
 import com.fls.animecommunity.animesanctuary.repository.NoteRepository;
-import com.fls.animecommunity.animesanctuary.service.interfaces.NoteLikeService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NoteLikeServiceImpl implements NoteLikeService {
+public class NoteLikeService {
 
 	private final NoteLikeRepository noteLikeRepository;
 	private final NoteRepository noteRepository;
 	private final MemberRepository memberRepository;
 
 	// addLike
-	@Override
 	public NoteLikeResponseDto addLike(@Valid NoteLikeRequestDto noteLikeRequestDto) {
 		// 호출확인
 		log.info("call NoteLikeService addLike()");
@@ -103,7 +101,6 @@ public class NoteLikeServiceImpl implements NoteLikeService {
 		}
 	}
 
-	@Override
 	public NoteLikeResponseDto removeLike(@Valid NoteLikeRequestDto noteLikeRequestDto) {
 	    // 호출 확인
 	    log.info("call NoteLikeService removeLike()");
@@ -168,7 +165,6 @@ public class NoteLikeServiceImpl implements NoteLikeService {
 	    }
 	}
 
-	@Override
 	public NoteLikeResponseDto getLikeStatus(Long noteId, Long memberId) {
 	    // 호출 확인
 	    log.info("call NoteLikeService getLikeStatus()");
@@ -195,7 +191,6 @@ public class NoteLikeServiceImpl implements NoteLikeService {
 	}
 
 
-	@Override
 	public NoteLikeResponseDto getLikeCount(Long noteId) {
 	    // 호출 확인
 	    log.info("call NoteLikeService getLikeCount()");

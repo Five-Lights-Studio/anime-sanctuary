@@ -1,4 +1,4 @@
-package com.fls.animecommunity.animesanctuary.service.impl;
+package com.fls.animecommunity.animesanctuary.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fls.animecommunity.animesanctuary.model.UpdateProfileRequest;
+import com.fls.animecommunity.animesanctuary.dto.member.UpdateProfileRequest;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.model.member.Role;
 import com.fls.animecommunity.animesanctuary.model.note.Note;
