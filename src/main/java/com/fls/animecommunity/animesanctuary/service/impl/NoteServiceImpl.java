@@ -61,7 +61,7 @@ public class NoteServiceImpl implements NoteService {
         log.info("새로운 노트를 생성합니다. 제목: {}", requestsDto.getTitle());
 
         // 로그인된 사용자 확인
-        Member member = memberRepository.findByUsername(requestsDto.getMemberId())
+        Member member = memberRepository.findById(requestsDto.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         // 카테고리 유효성 검사
