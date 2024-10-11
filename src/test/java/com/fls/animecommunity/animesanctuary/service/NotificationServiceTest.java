@@ -20,7 +20,6 @@ import com.fls.animecommunity.animesanctuary.model.comment.Comment;
 import com.fls.animecommunity.animesanctuary.model.member.Member;
 import com.fls.animecommunity.animesanctuary.model.notification.Notification;
 import com.fls.animecommunity.animesanctuary.repository.NotificationRepository;
-import com.fls.animecommunity.animesanctuary.service.NotificationService;
 
 class NotificationServiceTest {
 

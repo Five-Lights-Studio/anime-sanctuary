@@ -22,7 +22,6 @@ import org.mockito.MockitoAnnotations;
 import com.fls.animecommunity.animesanctuary.exception.ResourceNotFoundException;
 import com.fls.animecommunity.animesanctuary.model.tag.Tag;
 import com.fls.animecommunity.animesanctuary.repository.TagRepository;
-import com.fls.animecommunity.animesanctuary.service.TagService;
 
 class TagServiceTest {
 

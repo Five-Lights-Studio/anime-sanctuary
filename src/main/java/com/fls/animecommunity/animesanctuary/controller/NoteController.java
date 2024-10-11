@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -139,8 +138,8 @@ public class NoteController {
     @PostMapping("/save/{noteId}")
     public ResponseEntity<?> saveNote(@SessionAttribute("user") Member member
     								,@PathVariable("noteId") Long noteId, HttpServletRequest request) {
-        Member member = (Member) request.getSession().getAttribute("user");
-        if (member == null) {
+        Member member2 = (Member) request.getSession().getAttribute("user");
+        if (member2 == null) {
             return ResponseEntity.status(403).body("User must be logged in to save a note.");
         }
 

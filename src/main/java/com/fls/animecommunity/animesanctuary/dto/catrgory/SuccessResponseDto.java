@@ -1,7 +1,6 @@
 package com.fls.animecommunity.animesanctuary.dto.catrgory;
 
 import lombok.Data;
-import lombok.Getter;
 
 /*
  * Category의 requset가 성공했을 경우 

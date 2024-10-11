@@ -1,17 +1,13 @@
 package com.fls.animecommunity.animesanctuary.dto.note;
 
-import java.time.LocalDate;
 
-import com.fls.animecommunity.animesanctuary.dto.member.MemberRegisterDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /*
  * Note의 Requests 의 DataTransferObject

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.fls.animecommunity.animesanctuary.model.note.Note;
 import com.fls.animecommunity.animesanctuary.model.noteLike.NoteLike;
 
 public interface NoteLikeRepository extends JpaRepository<NoteLike, Long>{

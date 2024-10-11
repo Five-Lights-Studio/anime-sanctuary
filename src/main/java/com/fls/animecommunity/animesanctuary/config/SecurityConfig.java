@@ -1,6 +1,5 @@
 package com.fls.animecommunity.animesanctuary.config;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;

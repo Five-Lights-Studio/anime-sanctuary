@@ -1,6 +1,5 @@
 package com.fls.animecommunity.animesanctuary.dto.noteLike;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

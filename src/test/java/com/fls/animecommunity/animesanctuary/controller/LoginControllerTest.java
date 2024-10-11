@@ -1,6 +1,5 @@
 package com.fls.animecommunity.animesanctuary.controller;
 
-import com.fls.animecommunity.animesanctuary.controller.PageController;
 import com.fls.animecommunity.animesanctuary.dto.note.NoteResponseDto;
 import com.fls.animecommunity.animesanctuary.service.NoteService;
 

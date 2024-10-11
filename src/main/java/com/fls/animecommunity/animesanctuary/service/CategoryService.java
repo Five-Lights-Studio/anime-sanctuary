@@ -3,7 +3,6 @@ package com.fls.animecommunity.animesanctuary.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +89,7 @@ public class CategoryService {
 		    throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
 		}
 
-		Category category = optionalCategory.get();
+		
 		
 		categoryRepository.deleteById(id);
 //		log.info("Category deleted successfully with ID: {}", id);
